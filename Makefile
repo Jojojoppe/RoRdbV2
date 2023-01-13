@@ -1,4 +1,4 @@
-all: genautoload fillversion
+all: genautoload
 
 scope:
 	vendor/bin/php-scoper add-prefix
@@ -15,8 +15,12 @@ publish_version:
 	git checkout -b genrelease
 	make version
 	git add .
-	git commit --signoff -m "Generated version info"
+	git commit --signoff -m "Release V$(VERSION)"
 	git checkout master
 	git merge --no-ff genrelease -m "Release V$(VERSION)"
-	git branch -D genrelease
 	git checkout dev
+	git branch -D genrelease
+
+localinstall:
+	rm -rf local/nginx_php_mysql_phpmyadmin/web/wp-content/plugins/RoRdbV2/*
+	cp -r {build,includes,resources,vendor,composer.json,composer.lock,RoRdbV2.php,scoper.inc.php,README.MD} local/nginx_php_mysql_phpmyadmin/web/wp-content/plugins/RoRdbV2

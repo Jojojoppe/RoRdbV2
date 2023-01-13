@@ -33,8 +33,10 @@ if(!defined('WPINC')){ die; }
 define("RORDBV2_VERSION", "V.V.V-V");
 
 // Updater
-require_once plugin_dir_path(__FILE__)."includes/updater.php";
-define( 'WP_GITHUB_FORCE_UPDATE', true );
+// Script which checks github once in a while and lets the user update the plugin
+// from wordpress
+//require_once plugin_dir_path(__FILE__)."includes/updater.php";
+//define( 'WP_GITHUB_FORCE_UPDATE', true );
 if (is_admin()){
    $config = array(
       'slug' => plugin_basename(__FILE__),                                          // this is the slug of your plugin
@@ -55,8 +57,11 @@ if (is_admin()){
    new WP_GitHub_Updater($config);
 }
 
+require_once plugin_dir_path(__FILE__)."includes/wpdb.php";
+
 // Activation hook
 function rordbv2_activation(){
+    rordbv2_wpdb_install();
 }
 register_activation_hook(__FILE__, "rordbv2_activation");
 
