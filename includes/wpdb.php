@@ -68,10 +68,10 @@ function rordbv2_wpdb_install(){
         ) $charset_collate;";
         dbDelta("CREATE TABLE ".$table_categories.$sql);
         dbDelta("CREATE TABLE ".$table_locations.$sql);
-        $wpdb->insert($table_categories, ["name"=>"All", "searchtags"=>"All,", "childid_list"=>""]);
-        $wpdb->insert($table_categories, ["name"=>"None", "searchtags"=>"None,", "childid_list"=>""]);
-        $wpdb->insert($table_locations, ["name"=>"All", "searchtags"=>"All,", "childid_list"=>""]);
-        $wpdb->insert($table_locations, ["name"=>"None", "searchtags"=>"None,", "childid_list"=>""]);
+        $wpdb->insert($table_categories, ["name"=>"All", "searchtags"=>",All,", "childid_list"=>","]);
+        $wpdb->insert($table_categories, ["name"=>"None", "searchtags"=>",None,", "childid_list"=>","]);
+        $wpdb->insert($table_locations, ["name"=>"All", "searchtags"=>",All,", "childid_list"=>","]);
+        $wpdb->insert($table_locations, ["name"=>"None", "searchtags"=>",None,", "childid_list"=>","]);
 
         // items table (ID, date, name, category, location, )
         $sql = "CREATE TABLE $table_items (
@@ -113,13 +113,19 @@ function rordbv2_wpdb_set_claimgroups($cgroups){
     $wpdb->update($table_settings, ['text'=>json_encode($cgroups)], ['name'=>'groups']);
 }
 
-// Add a location/category to the database
-// expects a category name, the ID of the parent (null if top level) and the table name
-// NOTE: table name IS NOT checked so must be in form of loc or cat
-function rordbv2_wpdb_add_hierarchical($name, $parentID, $catloc){
+function rordbv2_wpdb_set_searchtags_hierarchical($table, $id, $name){
     global $wpdb;
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-    $table = $wpdb->prefix."rordbv2_".$catloc;
+
+    $parentnamesquery = "SELECT `name` FROM $table WHERE childid_list LIKE '%$id,%'";
+    $parentnames = array_map(function($item){return $item[0];}, $wpdb->get_results($parentnamesquery, "ARRAY_N"));
+    $searchtags = ','.$name.",".join(',', $parentnames).',';
+    $wpdb->query("UPDATE $table SET searchtags = '$searchtags' WHERE id=$id");
+}
+
+function rordbv2_wpdb_get_parentidlist_hierarchical($table, $parentid){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
     // Traverse full tree to get list of parents
     // (this is done to fill in the parentid_list field and add the new
@@ -128,7 +134,7 @@ function rordbv2_wpdb_add_hierarchical($name, $parentID, $catloc){
     // this means that the tree cannot be deeper than 500!
     // TODO create a global setting for this?
     $full_parent_tree = [];
-    $tovisit = $parentID;
+    $tovisit = $parentid;
     $counter = 0;
     while($tovisit!=null and $counter<500){
         $counter += 1;
@@ -136,18 +142,27 @@ function rordbv2_wpdb_add_hierarchical($name, $parentID, $catloc){
         $tovisit = $wpdb->get_var("SELECT parentid FROM $table WHERE (id=$tovisit)");
     }
 
+    return $full_parent_tree;
+}
+
+// Add a location/category to the database
+// expects a category name, the ID of the parent (null if top level) and the table name
+// NOTE: table name IS NOT checked so must be in form of loc or cat
+function rordbv2_wpdb_add_hierarchical($name, $parentID, $catloc){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
+
     // Add new loc/cat
-    $wpdb->query("INSERT INTO $table (name, parentid, parentid_list, childid_list) VALUES ('$name', '$parentID', '".join(',', $full_parent_tree)."', '')");
+    $full_parent_tree = rordbv2_wpdb_get_parentidlist_hierarchical($table, $parentID);
+    $wpdb->query("INSERT INTO $table (name, parentid, parentid_list, childid_list) VALUES ('$name', '$parentID', ',".join(',', $full_parent_tree).",', ',')");
     $newid = $wpdb->insert_id;
     // update child lists of parent tree
     foreach($full_parent_tree as $p){
         $wpdb->query("UPDATE $table SET childid_list = CONCAT(childid_list, '$newid,') WHERE id=$p");
     }
     // Set search tags
-    $parentnamesquery = "SELECT `name` FROM $table WHERE childid_list LIKE '%$newid,%'";
-    $parentnames = array_map(function($item){return $item[0];}, $wpdb->get_results($parentnamesquery, "ARRAY_N"));
-    $searchtags = $name.",".join(',', $parentnames).',';
-    $wpdb->query("UPDATE $table SET searchtags = '$searchtags' WHERE id=$newid");
+    rordbv2_wpdb_set_searchtags_hierarchical($table, $newid, $name);
 
 }
 
@@ -182,4 +197,33 @@ function rordbv2_wpdb_get_hierarchical($catloc){
     }
 
     return $output;
+}
+
+function rordbv2_wpdb_get_hierarchical_single($catloc, $id){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
+
+    return $wpdb->get_results("SELECT * from $table WHERE id=$id");
+}
+
+function rordbv2_wpdb_update_hierarchical($catloc, $id, $oldname, $name, $parentid){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
+
+    $full_parent_tree = rordbv2_wpdb_get_parentidlist_hierarchical($table, $parentid);
+    $wpdb->query("UPDATE $table SET name='$name', parentid=$parentid, searchtags=CONCAT(searchtags, '$name,'), parentid_list=',".join(',', $full_parent_tree).",' WHERE id=$id");
+    $wpdb->query("UPDATE $table SET childid_list = REPLACE(childid_list, ',$id,', ',')");
+    $wpdb->query("UPDATE $table SET childid_list = CONCAT(childid_list, '$id,') WHERE id=$parentid");
+    rordbv2_wpdb_set_searchtags_hierarchical($table, $id, $name);
+}
+
+function rordbv2_wpdb_delete_hierarchical($catloc, $id, $oldname){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
+
+    $wpdb->query("DELETE FROM $table WHERE id=$id");
+    $wpdb->query("UPDATE $table SET childid_list = REPLACE(childid_list, ',$id,', ','), searchtags = REPLACE(searchtags, ',$oldname,', ',')");
 }

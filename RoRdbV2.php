@@ -6,7 +6,7 @@ Version: V.V.V-V
 License: BSD-2
 Author: Joppe Blondel
 Author URI: https://joppeb.nl
-Description: Room of Requirements (RoR) database using Google drive and sheets
+Description: Room of Requirements (RoR) database
 Requires PHP: 7
 Copyright (c) 2023, Joppe Blondel
 Redistribution and use in source and binary forms, with or without
@@ -61,6 +61,7 @@ require_once plugin_dir_path(__FILE__)."includes/wpdb.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-wpsettings.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-settings.php";
 require_once plugin_dir_path(__FILE__)."includes/public-render-menu.php";
+require_once plugin_dir_path(__FILE__)."includes/public-render-main.php";
 require_once plugin_dir_path(__FILE__)."includes/public-shortcodes.php";
 
 // Activation hook
