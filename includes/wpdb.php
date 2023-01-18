@@ -68,10 +68,10 @@ function rordbv2_wpdb_install(){
         ) $charset_collate;";
         dbDelta("CREATE TABLE ".$table_categories.$sql);
         dbDelta("CREATE TABLE ".$table_locations.$sql);
-        $wpdb->insert($table_categories, ["name"=>"All", "searchtags"=>"All"]);
-        $wpdb->insert($table_categories, ["name"=>"None", "searchtags"=>"None"]);
-        $wpdb->insert($table_locations, ["name"=>"All", "searchtags"=>"All"]);
-        $wpdb->insert($table_locations, ["name"=>"None", "searchtags"=>"None"]);
+        $wpdb->insert($table_categories, ["name"=>"All", "searchtags"=>"All,", "childid_list"=>""]);
+        $wpdb->insert($table_categories, ["name"=>"None", "searchtags"=>"None,", "childid_list"=>""]);
+        $wpdb->insert($table_locations, ["name"=>"All", "searchtags"=>"All,", "childid_list"=>""]);
+        $wpdb->insert($table_locations, ["name"=>"None", "searchtags"=>"None,", "childid_list"=>""]);
 
         // items table (ID, date, name, category, location, )
         $sql = "CREATE TABLE $table_items (
@@ -115,10 +115,11 @@ function rordbv2_wpdb_set_claimgroups($cgroups){
 
 // Add a location/category to the database
 // expects a category name, the ID of the parent (null if top level) and the table name
-// NOTE: table name IS NOT checked so must be in form of WPPREFIX_loc or WPPREFIX_cat
-function rordbv2_wpdb_add_hierarchical($name, $parentID, $table){
+// NOTE: table name IS NOT checked so must be in form of loc or cat
+function rordbv2_wpdb_add_hierarchical($name, $parentID, $catloc){
     global $wpdb;
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
 
     // Traverse full tree to get list of parents
     // (this is done to fill in the parentid_list field and add the new
@@ -129,22 +130,56 @@ function rordbv2_wpdb_add_hierarchical($name, $parentID, $table){
     $full_parent_tree = [];
     $tovisit = $parentID;
     $counter = 0;
-    while($tovisit!=null and counter<500){
-        $counter++;
+    while($tovisit!=null and $counter<500){
+        $counter += 1;
         array_push($full_parent_tree, $tovisit);
         $tovisit = $wpdb->get_var("SELECT parentid FROM $table WHERE (id=$tovisit)");
     }
 
     // Add new loc/cat
-    if($parentID!=null){
-        $searchtags = join(', ', $full_parent_tree).", ".$name;
-    }else{
-        $searchtags = $name;
-    }
-    $wpdb->insert($table, ["name"=>$name, "parentid"=>$parentID, "parentid_list"=>join(',', $full_parent_tree)]);
-
+    $wpdb->query("INSERT INTO $table (name, parentid, parentid_list, childid_list) VALUES ('$name', '$parentID', '".join(',', $full_parent_tree)."', '')");
+    $newid = $wpdb->insert_id;
     // update child lists of parent tree
     foreach($full_parent_tree as $p){
-        $wpdb->query("UPDATE $table SET childid_list=childid_list+', '+$name WHERE id=$p");
+        $wpdb->query("UPDATE $table SET childid_list = CONCAT(childid_list, '$newid,') WHERE id=$p");
     }
+    // Set search tags
+    $parentnamesquery = "SELECT `name` FROM $table WHERE childid_list LIKE '%$newid,%'";
+    $parentnames = array_map(function($item){return $item[0];}, $wpdb->get_results($parentnamesquery, "ARRAY_N"));
+    $searchtags = $name.",".join(',', $parentnames).',';
+    $wpdb->query("UPDATE $table SET searchtags = '$searchtags' WHERE id=$newid");
+
+}
+
+// Get locs/cats
+// returns an array in form of [{level, element}]
+// where level is the nr of levels from the root
+// catloc: "cat" or "loc", NOTE: not checked
+function rordbv2_wpdb_get_hierarchical($catloc){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
+
+    $roots = $wpdb->get_results("SELECT * from $table WHERE parentid IS NULL");
+    $rest = $wpdb->get_results("SELECT * from $table WHERE parentid IS NOT NULL");
+
+    $output = [];
+    $stack = [];
+    $level = 1;
+    foreach($roots as $r){
+        array_push($stack, ["level"=>$level, "element"=>$r]);
+    }
+    while(count($stack)>0){
+        $el = array_pop($stack);
+        array_push($output, $el);
+
+        // Search for child
+        foreach($rest as $c){
+            if($c->parentid==$el["element"]->id){
+                array_push($stack, ["level"=>$el["level"]+1, "element"=>$c]);
+            }
+        }
+    }
+
+    return $output;
 }
