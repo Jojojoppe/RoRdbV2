@@ -113,6 +113,7 @@ function rordbv2_wpdb_set_claimgroups($cgroups){
     $wpdb->update($table_settings, ['text'=>json_encode($cgroups)], ['name'=>'groups']);
 }
 
+// Set the searchtags for a specific location/category
 function rordbv2_wpdb_set_searchtags_hierarchical($table, $id, $name){
     global $wpdb;
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
@@ -123,6 +124,7 @@ function rordbv2_wpdb_set_searchtags_hierarchical($table, $id, $name){
     $wpdb->query("UPDATE $table SET searchtags = '$searchtags' WHERE id=$id");
 }
 
+// Get the full parent tree of a category/location
 function rordbv2_wpdb_get_parentidlist_hierarchical($table, $parentid){
     global $wpdb;
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
@@ -178,6 +180,8 @@ function rordbv2_wpdb_get_hierarchical($catloc){
     $roots = $wpdb->get_results("SELECT * from $table WHERE parentid IS NULL");
     $rest = $wpdb->get_results("SELECT * from $table WHERE parentid IS NOT NULL");
 
+    $roots = array_reverse($roots);
+
     $output = [];
     $stack = [];
     $level = 1;
@@ -226,4 +230,23 @@ function rordbv2_wpdb_delete_hierarchical($catloc, $id, $oldname){
 
     $wpdb->query("DELETE FROM $table WHERE id=$id");
     $wpdb->query("UPDATE $table SET childid_list = REPLACE(childid_list, ',$id,', ','), searchtags = REPLACE(searchtags, ',$oldname,', ',')");
+}
+
+function rordbv2_wpdb_add_img($imgdata, $fname){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table_images = $wpdb->prefix."rordbv2_img";
+
+    $wpdb->insert($table_images, ["name"=>$fname, "data"=>$imgdata]);
+    return $wpdb->insert_id;
+}
+
+function rordbv2_wpdb_add_item($name, $cat, $loc, $color, $amount, $size, $comments, $imgid){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table_items = $wpdb->prefix."rordbv2_items";
+
+    $wpdb->insert($table_items, ["name"=>$name, "category"=>$cat, "location"=>$loc,
+        "hidden"=>0, "img"=>$imgid, "color"=>$color, "amount"=>$amount, "size"=>$size,
+        "comments"=>$comments]);
 }
