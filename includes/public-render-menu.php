@@ -36,17 +36,20 @@ function rordbv2_render_menu(){
     $cats = rordbv2_wpdb_get_hierarchical("cat");
     $locs = rordbv2_wpdb_get_hierarchical("loc");
 
-    $ret .= "<h5>Menu:</h5>";
-    // TODO check for permissions for each menu item
+    $ret .= "<hr><h5>Menu:</h5>";
     $ret .= "<a href='?page_id=".$pageid."'>Home</a><br>";
-    $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_add'>Create item</a><br>";
     $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_help'>Help</a><br>";
+    $ret .= "<form action='' method='get'><input type='hidden' name='page_id' value='$pageid'><input type='text' name='rordb_search'><input type='submit' value='Search'>";
+    if(isset($_GET['rordb_cat'])) $ret .= "<input type='hidden' name='rordb_cat' value='".$_GET['rordb_cat']."'>";
+    if(isset($_GET['rordb_loc'])) $ret .= "<input type='hidden' name='rordb_loc' value='".$_GET['rordb_loc']."'>";
+    if(isset($_GET['rordb_group'])) $ret .= "<input type='hidden' name='rordb_group' value='".$_GET['rordb_group']."'>";
+    $ret .= "</form>";
+
+    $ret .= "<hr><h5>Management:</h5>";
+    // TODO check for permissions for each menu item
+    $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_add'>Create item</a><br>";
     $ret .= rordbv2_render_menu_addhierarchical($cats, "cat");
     $ret .= rordbv2_render_menu_addhierarchical($locs, "loc");
-
-
-    // TODO create search
-    $ret .= "<h5>Search:</h5>";
 
 
     // List categories
@@ -55,7 +58,7 @@ function rordbv2_render_menu(){
     // on its own to not spam the database connection.
     // the table wont be incredibly big so this
     // should not give any problems
-    $ret .= "<h5>Categories:</h5>";
+    $ret .= "<hr><h5>Categories:</h5>";
     // TODO if added (checked via error/msg sytem) reload elements
     foreach($cats as $el){
         $cat = $el["element"];

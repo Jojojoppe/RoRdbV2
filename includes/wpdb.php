@@ -68,10 +68,10 @@ function rordbv2_wpdb_install(){
         ) $charset_collate;";
         dbDelta("CREATE TABLE ".$table_categories.$sql);
         dbDelta("CREATE TABLE ".$table_locations.$sql);
-        $wpdb->insert($table_categories, ["name"=>"All", "searchtags"=>",All,", "childid_list"=>","]);
-        $wpdb->insert($table_categories, ["name"=>"None", "searchtags"=>",None,", "childid_list"=>","]);
-        $wpdb->insert($table_locations, ["name"=>"All", "searchtags"=>",All,", "childid_list"=>","]);
-        $wpdb->insert($table_locations, ["name"=>"None", "searchtags"=>",None,", "childid_list"=>","]);
+        $wpdb->insert($table_categories, ["name"=>"All", "searchtags"=>",All,", "childid_list"=>",", "parentid_list"=>","]);
+        $wpdb->insert($table_categories, ["name"=>"None", "searchtags"=>",None,", "childid_list"=>",", "parentid_list"=>","]);
+        $wpdb->insert($table_locations, ["name"=>"All", "searchtags"=>",All,", "childid_list"=>",", "parentid_list"=>","]);
+        $wpdb->insert($table_locations, ["name"=>"None", "searchtags"=>",None,", "childid_list"=>",", 'parentid_list'=>","]);
 
         // items table (ID, date, name, category, location, )
         $sql = "CREATE TABLE $table_items (
@@ -118,7 +118,7 @@ function rordbv2_wpdb_set_searchtags_hierarchical($table, $id, $name){
     global $wpdb;
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
-    $parentnamesquery = "SELECT `name` FROM $table WHERE childid_list LIKE '%$id,%'";
+    $parentnamesquery = "SELECT `name` FROM $table WHERE childid_list LIKE ',%$id,%'";
     $parentnames = array_map(function($item){return $item[0];}, $wpdb->get_results($parentnamesquery, "ARRAY_N"));
     $searchtags = ','.$name.",".join(',', $parentnames).',';
     $wpdb->query("UPDATE $table SET searchtags = '$searchtags' WHERE id=$id");
@@ -261,7 +261,7 @@ function rordbv2_wpdb_get_items($where="1"){
     $res = $wpdb->get_results(
         "SELECT 
                 IT.name, IT.claimedby, IT.hidden, IT.color, IT.amount, 
-                IT.size, IT.comments,
+                IT.size, IT.comments, IT.id,
                 IM.data AS imgdata, CA.name AS catname, LO.name AS locname
             FROM $table_items AS IT 
             INNER JOIN $table_images AS IM ON IT.img=IM.id
