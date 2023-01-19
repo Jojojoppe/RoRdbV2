@@ -43,7 +43,7 @@ function rordbv2_wpdb_install(){
         dbDelta($sql);
         // Add basic fields
         $wpdb->insert($table_settings, ["name"=>"version", "text"=>RORDBV2_DBVERSION]);
-        $wpdb->insert($table_settings, ["name"=>"groups", "text"=>"['none', 'Toneel', 'Musical', 'TheatreLab', 'InterNEST', 'Other']"]);
+        $wpdb->insert($table_settings, ["name"=>"groups", "text"=>"[\"none\", \"Toneel\", \"Musical\", \"TheatreLab\", \"InterNEST\", \"Other\"]"]);
 
         // images table (ID, date, name, data)
         $sql = "CREATE TABLE $table_images (
@@ -80,7 +80,7 @@ function rordbv2_wpdb_install(){
             name tinytext NOT NULL,
             category mediumint(9) NOT NULL,
             location mediumint(9) NOT NULL,
-            claimedby mediumint(9) NOT NULL,
+            claimedby text NOT NULL,
             hidden mediumint(1) NOT NULL,
             img mediumint(9) NOT NULL,
             color tinytext,
@@ -100,7 +100,7 @@ function rordbv2_wpdb_get_claimgroups(){
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
     $table_settings = $wpdb->prefix."rordbv2";
 
-    $cgroups_string = $wpdb->get_var("SELECT text FROM $table_settings WHERE (name='groups')");
+    $cgroups_string = $wpdb->get_var("SELECT text FROM $table_settings WHERE name='groups'");
     return json_decode($cgroups_string);
 }
 
@@ -248,7 +248,7 @@ function rordbv2_wpdb_add_item($name, $cat, $loc, $color, $amount, $size, $comme
 
     $wpdb->insert($table_items, ["name"=>$name, "category"=>$cat, "location"=>$loc,
         "hidden"=>0, "img"=>$imgid, "color"=>$color, "amount"=>$amount, "size"=>$size,
-        "comments"=>$comments]);
+        "comments"=>$comments, "claimedby"=>"None"]);
 }
 
 function rordbv2_wpdb_edit_item($id, $name, $cat, $loc, $color, $amount, $size, $comments, $imgdata, $imgid){
@@ -261,6 +261,13 @@ function rordbv2_wpdb_edit_item($id, $name, $cat, $loc, $color, $amount, $size, 
         "hidden"=>0, "img"=>$imgid, "color"=>$color, "amount"=>$amount, "size"=>$size,
         "comments"=>$comments], ["id"=>$id]);
     $wpdb->update($table_images, ["data"=>$imgdata], ["id"=>$imgid]);
+}
+
+function rordbv2_wpdb_claim_item($id, $group){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table_items = $wpdb->prefix."rordbv2_items";
+    $wpdb->update($table_items, ["claimedby"=>$group], ["id"=>$id]);
 }
 
 function rordbv2_wpdb_get_items($where="1"){
