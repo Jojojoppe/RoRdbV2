@@ -251,6 +251,18 @@ function rordbv2_wpdb_add_item($name, $cat, $loc, $color, $amount, $size, $comme
         "comments"=>$comments]);
 }
 
+function rordbv2_wpdb_edit_item($id, $name, $cat, $loc, $color, $amount, $size, $comments, $imgdata, $imgid){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table_items = $wpdb->prefix."rordbv2_items";
+    $table_images = $wpdb->prefix."rordbv2_img";
+
+    $wpdb->update($table_items, ["name"=>$name, "category"=>$cat, "location"=>$loc,
+        "hidden"=>0, "img"=>$imgid, "color"=>$color, "amount"=>$amount, "size"=>$size,
+        "comments"=>$comments], ["id"=>$id]);
+    $wpdb->update($table_images, ["data"=>$imgdata], ["id"=>$imgid]);
+}
+
 function rordbv2_wpdb_get_items($where="1"){
     global $wpdb;
     $table_categories = $wpdb->prefix."rordbv2_cat";
@@ -262,7 +274,9 @@ function rordbv2_wpdb_get_items($where="1"){
         "SELECT 
                 IT.name, IT.claimedby, IT.hidden, IT.color, IT.amount, 
                 IT.size, IT.comments, IT.id,
-                IM.data AS imgdata, CA.name AS catname, LO.name AS locname
+                IM.data AS imgdata, IT.img as imgid,
+                CA.name AS catname, CA.id as catid,
+                LO.name AS locname, LO.id as locid
             FROM $table_items AS IT 
             INNER JOIN $table_images AS IM ON IT.img=IM.id
             INNER JOIN $table_categories AS CA ON IT.category=CA.id

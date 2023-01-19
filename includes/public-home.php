@@ -18,7 +18,7 @@ if(isset($_GET['rordb_search'])){
 
 $items = rordbv2_wpdb_get_items($where);  // temp all items
 
-echo "WHERE clause: $where<br>";
+//echo "WHERE clause: $where<br>";
 
 foreach($items as $i){
     // TODO if item is hidden skip it
@@ -31,7 +31,9 @@ foreach($items as $i){
             <b><?php echo $i->name; ?></b>
             <?php 
                 // TODO check for permission to edit file
-                echo "<a href='?page_id=$pageid&rordb_action=edit&rordb_edit=item&rordb_id=$i->id'>edit</a>";
+                echo "<a href='?page_id=$pageid&rordb_action=rordb_edit&rordb_edit=item&rordb_id=$i->id'>edit</a>";
+                // TODO check if permission to claim
+                echo "    <select><option>---</option><option>somegroupname</option></select><input type='submit' value='claim' />";
             ?>
             <br>
             Category: <?php echo $i->catname; ?><br>

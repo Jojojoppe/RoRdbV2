@@ -74,3 +74,6 @@ register_activation_hook(__FILE__, "rordbv2_activation");
 function rordbv2_deactivation(){
 }
 register_deactivation_hook(__FILE__, "rordbv2_deactivation");
+
+// TODO MUST CHECK ALL DATABASE QUERIES TO PREPARE THEM!!! NOT YET DONE
+// TODO check if searchtags is still needed
