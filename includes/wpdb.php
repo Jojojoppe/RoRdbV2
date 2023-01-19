@@ -250,3 +250,24 @@ function rordbv2_wpdb_add_item($name, $cat, $loc, $color, $amount, $size, $comme
         "hidden"=>0, "img"=>$imgid, "color"=>$color, "amount"=>$amount, "size"=>$size,
         "comments"=>$comments]);
 }
+
+function rordbv2_wpdb_get_items($where="1"){
+    global $wpdb;
+    $table_categories = $wpdb->prefix."rordbv2_cat";
+    $table_locations = $wpdb->prefix."rordbv2_loc";
+    $table_items = $wpdb->prefix."rordbv2_items";
+    $table_images = $wpdb->prefix."rordbv2_img";
+
+    $res = $wpdb->get_results(
+        "SELECT 
+                IT.name, IT.claimedby, IT.hidden, IT.color, IT.amount, 
+                IT.size, IT.comments,
+                IM.data AS imgdata, CA.name AS catname, LO.name AS locname
+            FROM $table_items AS IT 
+            INNER JOIN $table_images AS IM ON IT.img=IM.id
+            INNER JOIN $table_categories AS CA ON IT.category=CA.id
+            INNER JOIN $table_locations AS LO ON IT.location=LO.id
+            WHERE $where
+    ");
+    return $res;
+}
