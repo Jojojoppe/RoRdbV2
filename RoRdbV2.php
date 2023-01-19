@@ -2,11 +2,11 @@
 /*
 Plugin Name: RoRdbV2
 Plugin URI: https://github.com/Jojojoppe/RoRdbV2
-Version: 0.0.1-0
+Version: 0.0.2-0
 License: BSD-2
 Author: Joppe Blondel
 Author URI: https://joppeb.nl
-Description: Room of Requirements (RoR) database using Google drive and sheets
+Description: Room of Requirements (RoR) database
 Requires PHP: 7
 Copyright (c) 2023, Joppe Blondel
 Redistribution and use in source and binary forms, with or without
@@ -30,11 +30,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 if(!defined('WPINC')){ die; }
 
-define("RORDBV2_VERSION", "0.0.1-0");
+define("RORDBV2_VERSION", "0.0.2-0");
 
 // Updater
-require_once plugin_dir_path(__FILE__)."includes/updater.php";
-define( 'WP_GITHUB_FORCE_UPDATE', true );
+// Script which checks github once in a while and lets the user update the plugin
+// from wordpress
+//require_once plugin_dir_path(__FILE__)."includes/updater.php";
+//define( 'WP_GITHUB_FORCE_UPDATE', true );
 if (is_admin()){
    $config = array(
       'slug' => plugin_basename(__FILE__),                                          // this is the slug of your plugin
@@ -55,8 +57,16 @@ if (is_admin()){
    new WP_GitHub_Updater($config);
 }
 
+require_once plugin_dir_path(__FILE__)."includes/wpdb.php";
+require_once plugin_dir_path(__FILE__)."includes/admin-wpsettings.php";
+require_once plugin_dir_path(__FILE__)."includes/admin-settings.php";
+require_once plugin_dir_path(__FILE__)."includes/public-render-menu.php";
+require_once plugin_dir_path(__FILE__)."includes/public-render-main.php";
+require_once plugin_dir_path(__FILE__)."includes/public-shortcodes.php";
+
 // Activation hook
 function rordbv2_activation(){
+    rordbv2_wpdb_install();
 }
 register_activation_hook(__FILE__, "rordbv2_activation");
 
@@ -64,3 +74,6 @@ register_activation_hook(__FILE__, "rordbv2_activation");
 function rordbv2_deactivation(){
 }
 register_deactivation_hook(__FILE__, "rordbv2_deactivation");
+
+// TODO MUST CHECK ALL DATABASE QUERIES TO PREPARE THEM!!! NOT YET DONE
+// TODO check if searchtags is still needed
