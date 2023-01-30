@@ -1,9 +1,13 @@
 <?php
 
-// TODO check for permission to view this page
-
 if(!isset($_GET['rordb_edit']) or !isset($_GET['rordb_id']) or $_GET['rordb_edit']!="item"){
     echo "ERROR: edit type or ID not specified or edit type not 'item'";
+    return;
+}
+
+// check for permission to view this page
+if(!current_user_can('rordbv2_edit_items')){
+    echo "You cannot edit or add items";
     return;
 }
 
@@ -23,6 +27,8 @@ if(isset($_POST['rordb_name'])){
     $imgid = $_POST['rordb_imgid'];
     $id = $_GET['rordb_id'];
 
+    echo $imgid;
+    echo $imgdata;
     rordbv2_wpdb_edit_item($id, $name, $cat, $loc, $color, $amount, $size, $comments, $imgdata, $imgid);
 }
 
@@ -79,7 +85,7 @@ wp_enqueue_script('rordbv2_public_items_js', plugin_dir_url(__FILE__)."../resour
     <input type='hidden' name='rordb_img' id='rordb_img' value='<?php echo $item->imgdata; ?>'>
     <input type='hidden' name='rordb_imgid' value='<?php echo $item->imgid; ?>'>
     <img id='rordb_imgview' width='200' src='<?php echo $item->imgdata; ?>'><br>
-    <input type='file' accept='image/*' id='rordb_imgfile' onchange='javascript:rordbv2_put_imgcontent_in_img("rordb_imgfile", "rordb_imgview", "rordb_img")'></br>
+    <input type='file' accept='image/*' id='rordb_imgfile' oninput='javascript:rordbv2_put_imgcontent_in_img("rordb_imgfile", "rordb_imgview", "rordb_img")'></br>
 
     <input type='submit' value='Edit item' />
 </form>

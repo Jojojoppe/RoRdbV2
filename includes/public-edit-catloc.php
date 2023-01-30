@@ -1,9 +1,18 @@
 <?php
 
-// TODO check for permission to view this page
 
 if(!isset($_GET['rordb_edit']) or !isset($_GET['rordb_id']) or ($_GET['rordb_edit']!="cat" and $_GET['rordb_edit']!="loc")){
     echo "ERROR: edit type or ID not specified or edit type not 'cat' or 'loc'";
+    return;
+}
+
+// check for permission to view this page
+if($_GET['rordb_edit']=="cat" && !current_user_can('rordbv2_edit_categories')){
+    echo "You cannot edit or add categories";
+    return;
+}
+if($_GET['rordb_edit']=="loc" && !current_user_can('rordbv2_edit_locations')){
+    echo "You cannot edit or add locations";
     return;
 }
 

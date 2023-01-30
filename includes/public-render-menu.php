@@ -3,7 +3,13 @@
 function rordbv2_render_menu_addhierarchical($elements, $catloc){
     $ret = "";
 
-    // TODO check for create permission, if not just return empty!
+    // check for create permission, if not just return empty!
+    if($catloc=="cat" && !current_user_can('rordbv2_edit_categories')){
+        return $ret;
+    }
+    if($catloc=="loc" && !current_user_can('rordbv2_edit_locations')){
+        return $ret;
+    }
 
     // Check if clicked on add
     if(isset($_POST["rordb_create_".$catloc])){
@@ -45,11 +51,11 @@ function rordbv2_render_menu(){
     if(isset($_GET['rordb_group'])) $ret .= "<input type='hidden' name='rordb_group' value='".$_GET['rordb_group']."'>";
     $ret .= "</form>";
 
-    $ret .= "<hr><h5>Management:</h5>";
-    // TODO check for permissions for each menu item
-    $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_add'>Create item</a><br>";
-    $ret .= rordbv2_render_menu_addhierarchical($cats, "cat");
-    $ret .= rordbv2_render_menu_addhierarchical($locs, "loc");
+    if(current_user_can('rordbv2_edit_item') or current_user_can('rordbv2_edit_categories') or current_user_can('rordbv2_edit_locations')) $ret .= "<hr><h5>Management:</h5>";
+    // check for permissions for each menu item
+    if(current_user_can('rordbv2_edit_items')) $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_add'>Create item</a><br>";
+    if(current_user_can('rordbv2_edit_categories')) $ret .= rordbv2_render_menu_addhierarchical($cats, "cat");
+    if(current_user_can('rordbv2_edit_locations')) $ret .= rordbv2_render_menu_addhierarchical($locs, "loc");
 
 
     // List categories
@@ -63,8 +69,8 @@ function rordbv2_render_menu(){
     foreach($cats as $el){
         $cat = $el["element"];
         $ret .= "<a href='?page_id=".$pageid."&rordb_cat=".$cat->id."'>".str_repeat("|", $el["level"]-1).'+ '.$cat->name."</a>";
-        // TODO check if permission
-        $ret .= "  (<a href='?page_id=".$pageid."&rordb_action=rordb_edit&rordb_edit=cat&rordb_id=".$el["element"]->id."'>edit</a>)";
+        // check if permission
+        if(current_user_can('rordbv2_edit_categories')) $ret .= "  (<a href='?page_id=".$pageid."&rordb_action=rordb_edit&rordb_edit=cat&rordb_id=".$el["element"]->id."'>edit</a>)";
         $ret .= "<br>";
     }
 
@@ -75,8 +81,8 @@ function rordbv2_render_menu(){
     foreach($locs as $el){
         $loc = $el["element"];
         $ret .= "<a href='?page_id=".$pageid."&rordb_loc=".$loc->id."'>".str_repeat("|", $el["level"]-1).'+ '.$loc->name."</a>";
-        // TODO check if permission
-        $ret .= "  (<a href='?page_id=".$pageid."&rordb_action=rordb_edit&rordb_edit=loc&rordb_id=".$el["element"]->id."'>edit</a>)";
+        // check if permission
+        if(current_user_can('rordbv2_edit_locations')) $ret .= "  (<a href='?page_id=".$pageid."&rordb_action=rordb_edit&rordb_edit=loc&rordb_id=".$el["element"]->id."'>edit</a>)";
         $ret .= "<br>";
     }
 

@@ -1,6 +1,10 @@
 <?php
 
-// TODO check for permission to view this page
+// check for permission to view this page
+if(!current_user_can('rordbv2_edit_items')){
+    echo "You cannot edit or add items";
+    return;
+}
 
 // check if we must do an action
 if(isset($_POST['rordb_name'])){
@@ -59,14 +63,15 @@ wp_enqueue_script('rordbv2_public_items_js', plugin_dir_url(__FILE__)."../resour
     <!-- TODO add claimed by here? -->
     <!-- TODO add hidden here? -->
 
-    Color: <input type='text' name='rordb_color' /> </br>
-    Amount: <input type='text' name='rordb_amount' /> </br>
-    Size: <input type='text' name='rordb_size' /> </br>
-    Comments: <textarea name='rordb_comments'></textarea> </br>
+    Color: <input type='text' name='rordb_color' value=''/> </br>
+    Amount: <input type='text' name='rordb_amount' value=''/> </br>
+    Size: <input type='text' name='rordb_size' value=''/> </br>
+    Comments: <textarea name='rordb_comments'> </textarea> </br>
 
     <input type='hidden' name='rordb_img' id='rordb_img'>
     <img id='rordb_imgview' width='200'><br>
-    <input type='file' accept='image/*' id='rordb_imgfile' onchange='javascript:rordbv2_put_imgcontent_in_img("rordb_imgfile", "rordb_imgview", "rordb_img")'></br>
+    <input type='file' accept='image/*' id='rordb_imgfile' onChange='javascript:rordbv2_put_imgcontent_in_img("rordb_imgfile", "rordb_imgview", "rordb_img")'>
+    </br>
 
     <input type='submit' value='Create item' />
 </form>

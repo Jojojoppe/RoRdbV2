@@ -58,6 +58,7 @@ if (is_admin()){
 }
 
 require_once plugin_dir_path(__FILE__)."includes/wpdb.php";
+require_once plugin_dir_path(__FILE__)."includes/permissions.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-wpsettings.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-settings.php";
 require_once plugin_dir_path(__FILE__)."includes/public-render-menu.php";
@@ -67,11 +68,13 @@ require_once plugin_dir_path(__FILE__)."includes/public-shortcodes.php";
 // Activation hook
 function rordbv2_activation(){
     rordbv2_wpdb_install();
+    rordbv2_users_init();
 }
 register_activation_hook(__FILE__, "rordbv2_activation");
 
 // Deactivation hook
 function rordbv2_deactivation(){
+    rordbv2_users_deinit();
 }
 register_deactivation_hook(__FILE__, "rordbv2_deactivation");
 
