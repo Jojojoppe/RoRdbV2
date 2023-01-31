@@ -2,7 +2,7 @@
 /*
 Plugin Name: RoRdbV2
 Plugin URI: https://github.com/Jojojoppe/RoRdbV2
-Version: 0.0.2-0
+Version: 0.0.3-0
 License: BSD-2
 Author: Joppe Blondel
 Author URI: https://joppeb.nl
@@ -30,7 +30,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 if(!defined('WPINC')){ die; }
 
+<<<<<<< HEAD
 define("RORDBV2_VERSION", "0.0.2-0");
+=======
+define("RORDBV2_VERSION", "0.0.3-0");
+>>>>>>> genrelease
 
 // Updater
 // Script which checks github once in a while and lets the user update the plugin
@@ -58,6 +62,7 @@ if (is_admin()){
 }
 
 require_once plugin_dir_path(__FILE__)."includes/wpdb.php";
+require_once plugin_dir_path(__FILE__)."includes/permissions.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-wpsettings.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-settings.php";
 require_once plugin_dir_path(__FILE__)."includes/public-render-menu.php";
@@ -67,11 +72,13 @@ require_once plugin_dir_path(__FILE__)."includes/public-shortcodes.php";
 // Activation hook
 function rordbv2_activation(){
     rordbv2_wpdb_install();
+    rordbv2_users_init();
 }
 register_activation_hook(__FILE__, "rordbv2_activation");
 
 // Deactivation hook
 function rordbv2_deactivation(){
+    rordbv2_users_deinit();
 }
 register_deactivation_hook(__FILE__, "rordbv2_deactivation");
 
