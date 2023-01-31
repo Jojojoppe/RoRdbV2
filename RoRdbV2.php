@@ -2,7 +2,7 @@
 /*
 Plugin Name: RoRdbV2
 Plugin URI: https://github.com/Jojojoppe/RoRdbV2
-Version: 0.0.3-0
+Version: 0.0.3-1
 License: BSD-2
 Author: Joppe Blondel
 Author URI: https://joppeb.nl
@@ -30,11 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 if(!defined('WPINC')){ die; }
 
-<<<<<<< HEAD
-define("RORDBV2_VERSION", "0.0.2-0");
-=======
-define("RORDBV2_VERSION", "0.0.3-0");
->>>>>>> genrelease
+define("RORDBV2_VERSION", "0.0.3-1");
 
 // Updater
 // Script which checks github once in a while and lets the user update the plugin
