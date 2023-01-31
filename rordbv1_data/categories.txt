@@ -1,0 +1,95 @@
+List of Categories
++ All
++ ---1 edit
++ ------2 edit
++ ---Wearables edit
++ ------Feet edit
++ ---------Shoes edit
++ ------Legs edit
++ ---------Trousers edit
++ ---------Shorts edit
++ ---------Tights edit
++ ------Top edit
++ ---------Shirt edit
++ ---------Sweater edit
++ ---------Jacket edit
++ ---------Corset edit
++ ---------Outer wear (coats etc.) edit
++ ---------top_Other edit
++ ------Full edit
++ ---------Dress edit
++ ---------Robe edit
++ ---------Full-body suit edit
++ ---------Aprons edit
++ ------Arms/hands edit
++ ---------Gloves edit
++ ------Head edit
++ ---------Hat edit
++ ---------Wig edit
++ ---------head_other edit
++ ------Face edit
++ ---------Mask edit
++ ---------Glasses edit
++ ------Prosthetics edit
++ ------Accessories (belts etc.) edit
++ ------Painting clothes edit
++ ---Items edit
++ ------Weapon edit
++ ---------Melee edit
++ ------------Bladed edit
++ ---------Ranged edit
++ ------------Gun edit
++ ------------Bow edit
++ ------Stationary/office edit
++ ------Tableware edit
++ ---------Cup/glass/bottle edit
++ ---------Plate edit
++ ---------Cutlery edit
++ ---------Pots and Pans edit
++ ---------Food trays edit
++ ------Floral edit
++ ------Food (fake) edit
++ ------Other edit
++ ---------Long edit
++ ---------Army edit
++ ---------Household edit
++ ---------Handheld edit
++ ---------Lighting edit
++ ---------Glass edit
++ ------Bags, Suitcases and Containers edit
++ ------other cloth items edit
++ ---------pillows edit
++ ---------blankets edit
++ ---------Fabric edit
++ ---Make-up edit
++ ---Tools edit
++ ------Household edit
++ ------Electric edit
++ ------Brushes edit
++ ------Paint Rollers edit
++ ------Measuring edit
++ ------other tools edit
++ ---Materials edit
++ ------Paint edit
++ ------Fabric edit
++ ------Paper edit
++ ------Paint-like edit
++ ------Tarps edit
++ ------Beads edit
++ ------Cufflinks edit
++ ------Buttons edit
++ ------Shiny stuff edit
++ ------Pins and Staples edit
++ ------other materials edit
++ ------Wood edit
++ ---Board stuff edit
++ ---Writing edit
++ ---electronics edit
++ ---animals edit
++ ---Large cloths edit
++ ---Archive edit
++ ---Chairs edit
++ None
++ ---Cleaning materials edit
++ ---Beverages edit
+

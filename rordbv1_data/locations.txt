@@ -1,0 +1,70 @@
+List of Locations
++ All
++ ---38 - Make-up drawer 1 - Make-up base edit
++ ---39 - Make-up drawer 2 - Make-up extra edit
++ ---40 - Make-up drawer 3 - Brushes and tools edit
++ ---41 - Make-up drawer 4 - Hair edit
++ ---42 - Make-up drawer 5 - Special effects edit
++ ---43 - Make-up drawer 6 - Disposables edit
++ ---37 - Make-up Box 1 - Stock edit
++ ---1 - Profession specific props edit
++ ---2 - below the waist accessories edit
++ ---3 - face accessories edit
++ ---4 - Neck accessories edit
++ ------4.2 - Red Scarves edit
++ ---5 - Arm accessories edit
++ ---6 - Writing tools edit
++ ---21 - Electronic props edit
++ ---32 - Misc. props edit
++ ---33 - Wigs and Weaponry edit
++ ------33.1 - Wigs edit
++ ------33.2 - armor and small weapons edit
++ ---22 - Flower baskets edit
++ ---23 - random large stuff and frames edit
++ ------23.1 - random large stuff edit
++ ------23.2 - large rectangular stuff edit
++ ---Delete this location edit
++ ---35 - Books and Lighting edit
++ ------35.1 - Books and Notetaking tools edit
++ ------35.2 - Lighting edit
++ ---24 - suitcases and other containers edit
++ ---28 - glass and cups edit
++ ---36 - Shoes edit
++ ---25 - food and weird hats edit
++ ------25.2 - big floppy, magic, christmas and monstrous hats edit
++ ------25.1 - food and cooking edit
++ ---29 - hats edit
++ ---12 - Tall items/Corner edit
++ ---7 - board closet top edit
++ ---11 - board closet bottom edit
++ ---45 - Tape edit
++ ---49 - fisheyes, plugs, drillbits etc. edit
++ ---46 - Sandpaper, workgloves edit
++ ---47 - glue, elastic bands edit
++ ---48 - (dish)sponges, cloth pegs, tin foil and metal wires edit
++ ---50 - screws edit
++ ---51 - toolbox with items like staples edit
++ ---52 - screwdrivers, pliere, files edit
++ ---53 - paint brushes edit
++ ---54 - light bulbs, hinges and metal connection plates edit
++ ---55 - ropes edit
++ ---56 - glitter, wooden sticks edit
++ ---44 - attachable wheels, large metal connection plates, metal pipe edit
++ ---15 - (colorful) papers edit
++ ---13 - materials left top closet edit
++ ---19 - materials bottom closet edit
++ ---20 - chair, candlestick edit
++ ---0 - Center of the room edit
++ ---under the clothing edit
++ ---14 - materials middle top closet edit
++ ---15 - materials right top closet edit
++ ---16 - materials top closet edit
++ ---17 - materials left middle closet edit
++ ---18 - materials right middle closet edit
++ ---8 - 2nd from top board closet edit
++ ---9 - middle board closet edit
++ ---10 - 2nd from bottom board closet edit
++ ---11 - bottom board closet edit
++ ---65 - jacket lower edit
++ None
++ ---34 - Other edit
