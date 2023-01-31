@@ -1,5 +1,5 @@
 # RoRdb V2
 
 <!---
-~Current Version:V.V.V-V~
+~Current Version:0.0.3-0~
 --->
