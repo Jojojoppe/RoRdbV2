@@ -7,7 +7,7 @@ genautoload:
 	composer dump-autoload --working-dir build -a
 
 VERSIONFILES := README.MD RoRdbV2.php
-VERSION := 0.0.4-0
+VERSION := 0.0.4-1
 version:
 	sed -i "s/V.V.V-V/$(VERSION)/g" $(VERSIONFILES)
 
