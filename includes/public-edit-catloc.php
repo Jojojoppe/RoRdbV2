@@ -59,7 +59,7 @@ $list = rordbv2_wpdb_get_hierarchical($_GET['rordb_edit']);
         foreach($list as $el){
             if($el["element"]->id==$info->id) continue;
             $lvl = $el["level"];
-            $lvlstr = str_repeat('|', $lvl-1).'+ ';
+            $lvlstr = str_repeat('--', $lvl-1).'+ ';
             echo "<option value='".$el["element"]->id."'";
             if($el["element"]->id==$info->parentid) echo " selected";
             echo ">".$lvlstr.$el["element"]->name."</option>";

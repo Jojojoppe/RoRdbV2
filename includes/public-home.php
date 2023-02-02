@@ -22,6 +22,19 @@ if(isset($_GET['rordb_search'])){
     $where .= " AND LOWER(CONCAT(IT.name, IT.color, IT.amount, IT.size, IT.comments, CA.name, LO.name)) LIKE LOWER('%".$_GET['rordb_search']."%')";
 }
 
+// Check if search is just "1", then show homepage
+if($where=="1"){
+?>
+
+    TODO: here comes some protocol information...<br>
+    Welcome to the RoR database!!! We are happy to have you here! =D
+
+<?php
+    return;
+}
+
+// Do a search
+
 $items = rordbv2_wpdb_get_items($where);
 $claimgroups = rordbv2_wpdb_get_claimgroups();
 

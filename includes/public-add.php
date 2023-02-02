@@ -33,45 +33,44 @@ wp_enqueue_script('rordbv2_public_items_js', plugin_dir_url(__FILE__)."../resour
 ?>
 
 <h4>Create item</h4>
-<form action='' method='post'>
-    Name: <input type='text' name='rordb_name' /> </br>
+<div role="form" class="wpcf7"><form action='' method='post' class="wpcf7">
+    <p><label>Name:<br></label><span class='wpcf7-form-control-wrap'><input type='text' name='rordb_name' class="wpcf7-form-control wpcf7-text"/></span></p>
 
-    Category: <select name='rordb_cat'>
+    <p><label>Category:<br></label><span class='wpcf7-form-control-wrap'><select name='rordb_cat'>
     <?php
         $lvl = -1;
         foreach($cats as $el){
             $lvl = $el["level"];
-            $lvlstr = str_repeat('|', $lvl-1).'+ ';
+            $lvlstr = str_repeat('--', $lvl-1).'+ ';
             echo "<option value='".$el["element"]->id."'";
             echo ">".$lvlstr.$el["element"]->name."</option>";
         }
     ?>
-    </select><br>
+    </select></span></p>
 
-    Location: <select name='rordb_loc'>
+    <p><label>Location:<br></label><span class='wpcf7-form-control-wrap'><select name='rordb_loc'>
     <?php
         $lvl = -1;
         foreach($locs as $el){
             $lvl = $el["level"];
-            $lvlstr = str_repeat('|', $lvl-1).'+ ';
+            $lvlstr = str_repeat('--', $lvl-1).'+ ';
             echo "<option value='".$el["element"]->id."'";
             echo ">".$lvlstr.$el["element"]->name."</option>";
         }
     ?>
-    </select><br>
+    </select></span></p>
 
     <!-- TODO add claimed by here? -->
     <!-- TODO add hidden here? -->
 
-    Color: <input type='text' name='rordb_color' value=''/> </br>
-    Amount: <input type='text' name='rordb_amount' value=''/> </br>
-    Size: <input type='text' name='rordb_size' value=''/> </br>
-    Comments: <textarea name='rordb_comments'> </textarea> </br>
+    <p><label>Color:<br></label><span class="wpcf7-form-control wpcf7-text"><input type='text' name='rordb_color' value=''/></span></p>
+    <p><label>Amount:<br></label><span class="wpcf7-form-control wpcf7-text"><input type='text' name='rordb_amount' value=''/></span></p>
+    <p><label>Size:<br></label><span class="wpcf7-form-control wpcf7-text"><input type='text' name='rordb_size' value=''/></span></p>
+    <p><label>Comments:<br></label><span class="wpcf7-form-control wpcf7-text"><textarea name='rordb_comments'> </textarea></span></p>
 
     <input type='hidden' name='rordb_img' id='rordb_img'>
     <img id='rordb_imgview' width='200'><br>
     <input type='file' accept='image/*' id='rordb_imgfile' onChange='javascript:rordbv2_put_imgcontent_in_img("rordb_imgfile", "rordb_imgview", "rordb_img")'>
-    </br>
 
-    <input type='submit' value='Create item' />
-</form>
+    <p class="submit"><input type='submit' value='Create item' class="button button-primary"/></p>
+</form></div>
