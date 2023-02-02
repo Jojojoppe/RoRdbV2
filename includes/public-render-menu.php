@@ -45,7 +45,7 @@ function rordbv2_render_menu(){
     $ret .= "<hr><h5>Menu:</h5>";
     $ret .= "<a href='?page_id=".$pageid."'>Home</a><br>";
     $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_help'>Help</a><br>";
-    if(current_user_can('rordbv2_edit_items')) $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_add'>Create item</a><br>";
+    if(current_user_can('rordbv2_edit_items')) $ret .= "<a href='?page_id=".$pageid."&rordb_action=rordb_add#rordv2_main'>Create item</a><br>";
     $ret .= "<form action='' method='get'><input type='hidden' name='page_id' value='$pageid'><input type='text' name='rordb_search'><input type='submit' value='Search'>";
     if(isset($_GET['rordb_cat'])) $ret .= "<input type='hidden' name='rordb_cat' value='".$_GET['rordb_cat']."'>";
     if(isset($_GET['rordb_loc'])) $ret .= "<input type='hidden' name='rordb_loc' value='".$_GET['rordb_loc']."'>";
