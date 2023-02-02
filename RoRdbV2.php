@@ -35,7 +35,7 @@ define("RORDBV2_VERSION", "V.V.V-V");
 // Updater
 // Script which checks github once in a while and lets the user update the plugin
 // from wordpress
-//require_once plugin_dir_path(__FILE__)."includes/updater.php";
+require_once plugin_dir_path(__FILE__)."includes/updater.php";
 //define( 'WP_GITHUB_FORCE_UPDATE', true );
 if (is_admin()){
    $config = array(
