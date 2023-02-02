@@ -1,7 +1,7 @@
 <?php
 
 function rordbv2_render_main(){
-    $ret = "<hr>";
+    $ret = "<hr id='rordbv2_main'>";
 
     // Check rordb_action
     //      rordb_add -> create item

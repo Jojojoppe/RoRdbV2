@@ -1,1 +1,17 @@
-Somehow pictures on the IOS google chrome DO NOT WORK....
+irma:
+    + permissions do not work automatically
+        dotcomwpp uses nest_ror role so should have added RoRdbV2 permissions to that user role
+    + user and maintainer permissions work against each other
+        dont check both deny and access in multiple groups
+    + create item to menu iso management
+        moved
+    - hierarchical items collapsable [btn alles uit alles in!]
+    - na editen cat/loc need refresh -> F5 causes resubmit...
+    - too many requests... (429)
+    - items verwijderen
+    - create item/etc links scrolling to main page
+    + knop omlaag?
+        "Go to content" button added
+    - HOME zonder zoekopdracht NIET ZOEKEN maar een welkom pagina
+
+    - Removing middle level category/location what happens?
