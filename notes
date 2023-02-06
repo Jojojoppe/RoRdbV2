@@ -9,9 +9,8 @@ irma:
     - na editen cat/loc need refresh -> F5 causes resubmit...
     - too many requests... (429)
     - items verwijderen
-    - create item/etc links scrolling to main page
+    + create item/etc links scrolling to main page
     + knop omlaag?
         "Go to content" button added
-    - HOME zonder zoekopdracht NIET ZOEKEN maar een welkom pagina
-
+    + HOME zonder zoekopdracht NIET ZOEKEN maar een welkom pagina
     - Removing middle level category/location what happens?

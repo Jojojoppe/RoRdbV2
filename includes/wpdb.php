@@ -203,6 +203,43 @@ function rordbv2_wpdb_get_hierarchical($catloc){
     return $output;
 }
 
+function rordbv2_wpdb_get_hierarchical_tree($catloc){
+    global $wpdb;
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    $table = $wpdb->prefix."rordbv2_".$catloc;
+
+    $roots = $wpdb->get_results("SELECT * from $table WHERE parentid IS NULL");
+    $rest = $wpdb->get_results("SELECT * from $table WHERE parentid IS NOT NULL");
+
+    $roots = array_reverse($roots);
+
+    $tree = [];
+    foreach($roots as $r){
+        array_push($tree, $r);
+    }
+    if(!function_exists("recur_build")){
+        function recur_build($parent, $rest){
+            foreach($rest as $c){
+                if($c->parentid==$parent["element"]->id){
+                    array_push($parent["children"], recur_build(["level"=>$parent["level"]+1, "element"=>$c, "children"=>[]], $rest));
+                }
+            }
+            // natural sort
+            usort($parent["children"], function($a, $b){
+                return strnatcmp($a["element"]->name, $b["element"]->name);
+            });
+            return $parent;
+        }
+    }
+
+    $output = [];
+    foreach($tree as $parent){
+        array_push($output, recur_build(["level"=>1, "element"=>$parent, "children"=>[]], $rest));
+    }
+    
+    return $output;
+}
+
 function rordbv2_wpdb_get_hierarchical_single($catloc, $id){
     global $wpdb;
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');

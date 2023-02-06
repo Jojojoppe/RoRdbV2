@@ -57,6 +57,7 @@ if (is_admin()){
    new WP_GitHub_Updater($config);
 }
 
+require_once plugin_dir_path(__FILE__)."includes/utils.php";
 require_once plugin_dir_path(__FILE__)."includes/wpdb.php";
 require_once plugin_dir_path(__FILE__)."includes/permissions.php";
 require_once plugin_dir_path(__FILE__)."includes/admin-wpsettings.php";
